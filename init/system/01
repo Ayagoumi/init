@@ -1,0 +1,3 @@
+the intalled version of my Derbian can be found in "/etc/debian_version"
+
+you'll see it by typing the command "cat /etc/debian_version"

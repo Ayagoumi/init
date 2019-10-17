@@ -1,0 +1,6 @@
+# Explanation:
+
+The IP addr of the DNS server we're using is located in : /etc/resolv.conf .
+
+To see your DNS server address type the following cat command as shell prompt:
+"cat /etc/resolv.conf"

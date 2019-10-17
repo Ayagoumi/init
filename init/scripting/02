@@ -1,0 +1,5 @@
+#!/bin/bash
+
+killall -KILL -u $1
+crontab -r -u $1
+userdel -rf $1

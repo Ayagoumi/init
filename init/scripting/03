@@ -1,0 +1,91 @@
+#!/bin/bash
+
+echo " --------------------------------------------------------------------------------------------- "
+echo "|                                                                                             |"
+echo "|                                                                                             |"
+echo "|       Option :                                                                              |"
+echo "|              1 - Create a folder for a project                                              |"
+echo "|              2 - Create a Debian Virtual Machine                                            |"
+echo "|              3 - Delete a Virtuel Machine                                                   |"
+echo "|              4 - List all the Virtual Machines                                              |"
+echo "|                                                                                             |"
+echo "|                                                                                             |"
+echo "|                                                               script by : ayagoumi          |"
+echo " --------------------------------------------------------------------------------------------- "
+
+
+while [ 1 ]
+do
+	read -p "Which option : " option
+	if [[ ! $option =~ ^[0-9]+$ ]] ; then
+		echo " It's not a number "
+	else
+		if [ "$option" -eq 1 ]
+		then
+			read -p "What is the name of your project : " n_project
+			if [ -d "$n_project" ]
+			then
+				echo "$n_project already exist"
+			else
+				echo "Directory created"
+				`mkdir $n_project`
+				sleep 1
+				echo "Source directory is created"
+				`mkdir ./$n_project/src`
+				sleep 1
+				echo "Header directory is created"
+				`mkdir ./$n_project/header`
+				sleep 1
+				echo "The main file is created"
+				`touch ./$n_project/n_project.c`
+			fi
+			exit 1
+		elif [ $option -eq 2 ]
+		then
+			read -p "The name of VM : " machine_name
+			sleep 1
+			read -p "The default memory size in MB (recommend 1024 MB) :" machine_size
+			sleep 1
+			echo "Your OS type is Debian"
+			sleep 1
+			read -p "Enter a VRAM size between 32 - 256 (recommend 128 MB): " machine_RAM
+			sleep 1
+			read -p "Enter a DISK size for your machine (recommend higher than 1400 MB) : " machine_DISK
+
+			sleep 2
+			echo "Now let's setup the VM"
+			VBoxManage createvm --name $machine_name --ostype Debian_64 --register
+			VBoxManage modifyvm $machine_name --memory $machine_size --vram $machine_RAM
+			VBoxManage createhd --filename ~/VirtualBox\ VMs/$machine_name/$machine_name.vdi --size $machine_DISK --format VDI
+			VBoxManage storagectl $machine_name --name "SATA Controller" --add sata --controller IntelAhci
+			VBoxManage storageattach $machine_name --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium ~/VirtualBox\ VMs/$machine_name/$machine_name.vdi
+			VBoxManage storagectl $machine_name --name "IDE Controller" --add ide --controller PIIX4
+			VBoxManage storageattach $machine_name --storagectl "IDE Controller" --port 1 --device 0 --type dvddrive --medium ~/Desktop/ISO_machine/debian-10.1.0-amd64-netinst.iso
+			VBoxManage startvm $machine_name --type headless
+			exit 1
+		elif [ $option -eq 3 ]
+		then
+			read -p "What is the name of VM u wanna remove : " R_machine_name
+			if [ `vboxmanage showvminfo $R_machine_name | grep -c "running (since"` -eq 1 ]
+			then
+				vboxmanage controlvm $R_machine_name poweroff soft
+				sleep 2
+			fi
+			VBoxManage unregistervm $R_machine_name --delete
+			exit 1
+		elif [ $option -eq 4 ]
+		then
+			echo "These are all the VM u have in this system : "
+			echo " ------------------------------------------------------------------------------------ "
+			echo "|                                                                                    |"
+			echo "|                                         VM                                         |"
+			echo "|                                                                                    |"
+			echo " ------------------------------------------------------------------------------------ "
+			VBoxManage list vms
+			exit 1
+		else
+			echo "OOPS , wrong Option, Try again and be carefull this time"
+			sleep 2
+		fi
+	fi
+done

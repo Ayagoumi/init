@@ -1,0 +1,3 @@
+The RSA key is a private key based on RSA algorithme used for authentivation ans symmetric key exchange during establishment.
+
+The File that contains the RSA key of the system is located in ~/.ssh/authorized_keys

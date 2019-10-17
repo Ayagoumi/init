@@ -1,0 +1,6 @@
+To log in to a ne user you have to follow these steps.
+
+1 - First if you don't know wich user you're in type "whoami" to know.
+2 - Then to log in the user that you want type "su - <new_user>" and press Enter.
+3 - You'll see a prompted telling you to entre the password of thet user, type it and hit Enter again.
+	ps: if you're in the root you wont be doing this step.

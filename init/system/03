@@ -1,0 +1,5 @@
+In order to make it permanent you should head to " /etc/hostname " and edit the name there.
+
+Then reboot the system by typing : " sudo reboot ".
+
+And all is good now. Just tap " hostname " and the system's name will be revealed.
